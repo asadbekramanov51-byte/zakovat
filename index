@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZAKOVAT — Talabalar</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700;900&family=Orbitron:wght@700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#020818;--s1:#0a1628;--s2:#0f2040;--c:#00d2ff;--c2:#00ffcc;--red:#ff4757;--gold:#ffd700;--gr:#1dd1a1;--bor:rgba(0,210,255,0.15);--txt:#e8f4f8;--mut:#7a9bb5}
+body{font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background-image:radial-gradient(ellipse at 15% 15%,#0d1b4b 0%,#050125 55%,#000 100%)}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(0,210,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,.03) 1px,transparent 1px);background-size:50px 50px}
+.wrap{position:relative;z-index:1;width:100%;max-width:480px;padding:18px}
+.sc{display:none;flex-direction:column;align-items:center;width:100%;animation:fup .3s ease}
+.sc.on{display:flex}
+@keyframes fup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.logo{font-family:'Orbitron',sans-serif;font-size:clamp(2.8rem,10vw,4.8rem);font-weight:900;color:var(--c);letter-spacing:5px;margin-bottom:4px;text-shadow:0 0 28px rgba(0,210,255,.8);animation:lglow 2.5s ease-in-out infinite alternate}
+@keyframes lglow{from{text-shadow:0 0 20px rgba(0,210,255,.5)}to{text-shadow:0 0 40px rgba(0,210,255,1),0 0 80px rgba(0,210,255,.5)}}
+.logo-s{color:var(--mut);font-size:.82rem;letter-spacing:1.5px;margin-bottom:20px}
+.card{background:var(--s1);border:1px solid var(--bor);border-radius:18px;padding:clamp(16px,5vw,28px);width:100%;position:relative;overflow:hidden;margin-bottom:12px}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent)}
+.card-t{font-family:'Orbitron',sans-serif;font-size:.68rem;font-weight:700;color:var(--c);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;text-align:center}
+.lbl{display:block;font-size:.7rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.inp{width:100%;background:rgba(255,255,255,.06);border:1.5px solid var(--bor);border-radius:10px;padding:13px 16px;color:var(--txt);font-family:'Exo 2',sans-serif;font-size:1rem;font-weight:700;outline:none;transition:border-color .2s;margin-bottom:10px}
+.inp:focus{border-color:var(--c);box-shadow:0 0 0 3px rgba(0,210,255,.1)}
+.inp::placeholder{color:var(--mut);opacity:.5;font-weight:400}
+.room-row{display:flex;gap:8px;margin-bottom:14px}
+.room-inp{flex:1}
+.errmsg{background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.3);border-radius:8px;padding:8px 12px;font-size:.8rem;font-weight:700;color:var(--red);margin-bottom:10px;display:none;text-align:center}
+.bigbtn{width:100%;padding:14px;font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;border-radius:50px;cursor:pointer;transition:all .2s;margin-bottom:8px}
+.bigbtn:hover{filter:brightness(1.1);transform:translateY(-2px)}
+.btn-enter{background:linear-gradient(135deg,var(--c),#0072ff);color:#000;box-shadow:0 6px 20px rgba(0,210,255,.4)}
+.btn-sub{background:linear-gradient(135deg,var(--gr),#00b894);color:#000;box-shadow:0 6px 20px rgba(29,209,161,.4)}
+.tag{background:linear-gradient(135deg,rgba(0,210,255,.12),rgba(0,114,255,.08));border:1px solid rgba(0,210,255,.28);border-radius:50px;padding:7px 20px;font-weight:700;font-size:.86rem;margin-bottom:16px;color:var(--c);text-align:center}
+.wait-ico{font-size:4.5rem;animation:pulse 2s ease infinite;margin-bottom:14px}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.wait-t{font-family:'Orbitron',sans-serif;font-size:1.1rem;color:var(--c);text-align:center;margin-bottom:6px}
+.wait-s{color:var(--mut);font-size:.8rem;text-align:center;margin-bottom:18px}
+.qnum{font-family:'Orbitron',sans-serif;font-size:.7rem;color:var(--mut);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;text-align:center}
+.qtext{font-size:clamp(.95rem,2.5vw,1.15rem);font-weight:700;line-height:1.55;text-align:center;margin-bottom:18px;background:rgba(0,210,255,.05);border:1px solid var(--bor);border-radius:12px;padding:15px}
+.tring{position:relative;width:120px;height:120px;margin:0 auto 18px}
+.tring svg{transform:rotate(-90deg)}
+.tt{fill:none;stroke:rgba(255,255,255,.07);stroke-width:9}
+.tf{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .5s}
+.tnum{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:2.5rem;font-weight:900;color:var(--c2)}
+.tnum.red{color:var(--red);animation:blink .65s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+.ans-ta{width:100%;background:rgba(255,255,255,.06);border:2px solid rgba(0,210,255,.25);border-radius:12px;padding:14px 16px;color:#fff;font-family:'Exo 2',sans-serif;font-size:1.05rem;font-weight:600;outline:none;transition:all .2s;margin-bottom:12px;resize:none;min-height:90px;line-height:1.6;display:block}
+.ans-ta:focus{border-color:var(--c);box-shadow:0 0 0 3px rgba(0,210,255,.15)}
+.ans-ta::placeholder{color:rgba(255,255,255,.3);font-weight:400}
+.ok-box{background:rgba(29,209,161,.1);border:1.5px solid rgba(29,209,161,.35);border-radius:12px;padding:16px;text-align:center;margin-bottom:12px;animation:boin .35s ease}
+@keyframes boin{from{transform:scale(.7)}70%{transform:scale(1.07)}to{transform:scale(1)}}
+.tu-box{background:rgba(255,71,87,.1);border:1.5px solid rgba(255,71,87,.3);border-radius:12px;padding:16px;text-align:center;margin-bottom:12px;animation:boin .35s ease}
+.ans-reveal{background:linear-gradient(135deg,rgba(249,202,36,.1),rgba(240,147,43,.07));border:2px solid rgba(249,202,36,.3);border-radius:13px;padding:16px;text-align:center;margin-bottom:12px}
+.ar-lbl{font-size:.7rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.ar-ans{font-size:1.2rem;font-weight:900;color:var(--gold);line-height:1.4}
+.res-ok{background:rgba(29,209,161,.1);border:1.5px solid rgba(29,209,161,.3);border-radius:9px;padding:11px;text-align:center;color:var(--gr);font-weight:700;margin-bottom:10px}
+.res-no{background:rgba(255,71,87,.1);border:1.5px solid rgba(255,71,87,.25);border-radius:9px;padding:11px;text-align:center;color:var(--red);font-weight:700;margin-bottom:10px}
+.mini-sc{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:14px}
+.ms{background:rgba(0,210,255,.07);border:1px solid rgba(0,210,255,.2);border-radius:50px;padding:4px 12px;font-size:.73rem;font-weight:700;color:var(--c)}
+.fr{display:flex;align-items:center;gap:10px;background:var(--s1);border:1px solid var(--bor);border-radius:10px;padding:11px 14px;margin-bottom:7px;animation:slin .4s ease both}
+@keyframes slin{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
+.fr-p{font-family:'Orbitron',sans-serif;font-size:1.15rem;width:28px;text-align:center}
+.fr-n{flex:1;font-weight:700;font-size:.88rem}
+.fr-n.me{color:var(--c)}
+.fr-bw{width:65px;height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.fr-bf{height:100%;background:linear-gradient(90deg,var(--c),var(--c2));border-radius:2px}
+.fr-s{font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:900;color:var(--gold);min-width:32px;text-align:right}
+#toasts{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:5px;align-items:center}
+.toast{background:var(--s1);border:1px solid var(--bor);border-radius:8px;padding:8px 16px;font-size:.78rem;font-weight:700;white-space:nowrap;animation:tsh .22s ease,thd .22s 2.8s ease both}
+@keyframes tsh{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes thd{to{opacity:0}}
+.toast.s{border-left:4px solid var(--gr)}.toast.e{border-left:4px solid var(--red)}.toast.i{border-left:4px solid var(--c)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:rgba(0,210,255,.2);border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- REGISTER -->
+  <div class="sc on" id="s-reg">
+    <div class="logo">⚡ ZAKOVAT</div>
+    <div class="logo-s">Intellektual bellashuv</div>
+    <div class="card">
+      <div class="card-t">🏫 Kirish</div>
+      <div class="errmsg" id="reg-err"></div>
+      <label class="lbl">6 xonali kod (adminda ko'rsatilgan)</label>
+      <input class="inp" id="room-inp" type="number" placeholder="Masalan: 423871" maxlength="6" style="margin-bottom:14px">
+      <label class="lbl">Guruh nomi</label>
+      <input class="inp" id="name-inp" type="text" placeholder="Masalan: 1-guruh" maxlength="30"
+        onkeydown="if(event.key==='Enter')register()">
+      <button class="bigbtn btn-enter" onclick="register()">🚀 KIRISH</button>
+    </div>
+  </div>
+
+  <!-- WAIT -->
+  <div class="sc" id="s-wait">
+    <div class="wait-ico">⏳</div>
+    <div class="wait-t">Kuting...</div>
+    <div class="wait-s">O'qituvchi savolni tanlaydi</div>
+    <div class="tag" id="w-tag">—</div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:.82rem;color:var(--mut);line-height:1.7">
+        Baraban aylangach savol ko'rinadi<br>
+        Javob uchun <b style="color:var(--c)">1 daqiqa</b> vaqt
+      </div>
+    </div>
+    <div class="mini-sc" id="mini-sc"></div>
+  </div>
+
+  <!-- QUESTION -->
+  <div class="sc" id="s-q">
+    <div class="tag" id="q-tag">—</div>
+    <div class="card">
+      <div class="qnum" id="qnum">SAVOL №—</div>
+      <div class="qtext" id="qtext">...</div>
+      <div class="tring">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="tt" cx="60" cy="60" r="52"/>
+          <circle class="tf" id="tc" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="0" stroke="#00ffcc"/>
+        </svg>
+        <div class="tnum" id="tnum">60</div>
+      </div>
+      <div class="ok-box" id="ok-box" style="display:none">
+        <div style="font-size:2.5rem;margin-bottom:6px">✅</div>
+        <div style="font-weight:800;color:var(--gr);font-size:1rem;margin-bottom:4px">Javob qabul qilindi!</div>
+        <div style="color:var(--mut);font-size:.82rem" id="ok-prev"></div>
+      </div>
+      <div class="tu-box" id="tu-box" style="display:none">
+        <div style="font-size:2.5rem;margin-bottom:6px">⏰</div>
+        <div style="font-weight:800;color:var(--red);font-size:1rem;margin-bottom:3px">Vaqt tugadi!</div>
+        <div style="color:var(--mut);font-size:.8rem">Javob qabul qilinmadi</div>
+      </div>
+      <div id="inp-area" style="display:block">
+        <label class="lbl">Javobingizni yozing</label>
+        <textarea class="ans-ta" id="ans-ta" placeholder="Javobingizni shu yerga yozing..." rows="3" maxlength="300"></textarea>
+        <button class="bigbtn btn-sub" id="sub-btn" onclick="sendAns()">📤 JAVOB YUBORISH</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANSWER REVEAL -->
+  <div class="sc" id="s-ans">
+    <div class="tag" id="a-tag">—</div>
+    <div class="card">
+      <div class="card-t">🎯 To'g'ri Javob</div>
+      <div class="ans-reveal">
+        <div class="ar-lbl">To'g'ri javob:</div>
+        <div class="ar-ans" id="ar-txt">—</div>
+      </div>
+      <div id="ar-result"></div>
+      <div style="text-align:center;color:var(--mut);font-size:.8rem;line-height:1.6">
+        ⏳ O'qituvchi keyingi savolni tanlaydi...
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="sc" id="s-fin">
+    <div class="logo" style="font-size:clamp(2rem,8vw,3.5rem);margin-bottom:3px">🏆</div>
+    <div class="logo-s" style="margin-bottom:20px">YAKUNIY REYTING</div>
+    <div style="width:100%" id="fin-rows"></div>
+  </div>
+
+</div>
+<div id="toasts"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+const FB_CONFIG = {
+  apiKey: "AIzaSyC_zakovat_demo_key",
+  authDomain: "zakovat-game.firebaseapp.com",
+  databaseURL: "https://zakovat-game-default-rtdb.firebaseio.com",
+  projectId: "zakovat-game"
+};
+
+var useFirebase = false;
+var db = null;
+var ROOM = '';
+
+function initFirebase(room) {
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+    db = firebase.database();
+    ROOM = room;
+    db.ref('.info/connected').on('value', function(snap) {
+      if (snap.val() === true) { useFirebase = true; }
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+function dbSet(path, val) {
+  if (useFirebase && db) { db.ref('rooms/'+ROOM+'/'+path).set(val); }
+  else { try { localStorage.setItem('zk_'+path.replace(/\//g,'_'), JSON.stringify(val)); } catch(e) {} }
+}
+function dbListen(path, cb) {
+  if (useFirebase && db) {
+    db.ref('rooms/'+ROOM+'/'+path).on('value', function(s){ cb(s.val()); });
+  } else {
+    var last = '';
+    setInterval(function(){
+      try { var v=localStorage.getItem('zk_'+path.replace(/\//g,'_'));if(v!==last){last=v;cb(JSON.parse(v));} } catch(e) {}
+    }, 900);
+  }
+}
+
+// ===== AUDIO =====
+var AC=null;
+function ac(){if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC;}
+function beep(f,d,v,t){try{var a=ac(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(v||.22,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d);o.start();o.stop(a.currentTime+d);}catch(e){}}
+var stTickI=null;
+function startStTick(dur){stopStTick();var n=0;stTickI=setInterval(function(){n++;var last=(dur-n)<=10;beep(last?900:440,last?.07:.05,last?.28:.14,'square');},1000);}
+function stopStTick(){clearInterval(stTickI);}
+function sndTimeup(){try{var a=ac();[880,660,440,330,220].forEach(function(f,i){var o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.type='sawtooth';o.frequency.value=f;g.gain.setValueAtTime(.25,a.currentTime+i*.18);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+i*.18+.4);o.start(a.currentTime+i*.18);o.stop(a.currentTime+i*.18+.5);});}catch(e){}}
+function sndQuestion(){try{var a=ac(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.type='sine';o.frequency.setValueAtTime(180,a.currentTime);o.frequency.exponentialRampToValueAtTime(540,a.currentTime+.6);g.gain.setValueAtTime(.2,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.8);o.start();o.stop(a.currentTime+.85);}catch(e){}}
+function sndSubmit(){beep(880,.08,.2,'sine');setTimeout(function(){beep(1100,.12,.25,'sine');},90);}
+function sndCorrect(){try{var a=ac();[523,659,784,1047,1319].forEach(function(f,i){var o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.2,a.currentTime+i*.1);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+i*.1+.38);o.start(a.currentTime+i*.1);o.stop(a.currentTime+i*.1+.42);});}catch(e){}}
+function sndWrong(){beep(294,.35,.25,'sawtooth');setTimeout(function(){beep(220,.5,.25,'sawtooth');},250);}
+
+// ===== STATE =====
+var CIRC=326.7;
+var myTeam='',myQid=null,submitted=false;
+var phase='idle',cdI=null,stLeft=60,lastStr='';
+
+function showSc(id){document.querySelectorAll('.sc').forEach(function(s){s.classList.remove('on');});document.getElementById('s-'+id).classList.add('on');}
+function setTags(n){['w-tag','q-tag','a-tag'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent='👥 '+n;});}
+
+// ===== REGISTER =====
+function register(){
+  ac();
+  var room=document.getElementById('room-inp').value.trim();
+  var name=document.getElementById('name-inp').value.trim();
+  var err=document.getElementById('reg-err');
+  if(!room||room.length!==6){err.textContent='6 xonali kodni kiriting!';err.style.display='block';return;}
+  if(!name){err.textContent='Guruh nomini kiriting!';err.style.display='block';return;}
+  err.style.display='none';
+  myTeam=name;ROOM=room;
+  try{initFirebase(room);}catch(e){}
+  setTags(name);showSc('wait');
+  startListening();
+  toast('Xush kelibsiz, '+esc(name)+'!','s');
+}
+
+function startListening(){
+  dbListen('live', function(live){
+    if(!live)return;
+    var str=JSON.stringify(live);
+    if(str===lastStr)return;
+    lastStr=str;
+    updateMini();
+    if(live.phase==='final'){doFinal(live);return;}
+    if(live.phase==='question') doQuestion(live);
+    else if(live.phase==='timer')  doTimer(live);
+    else if(live.phase==='timeup') doTimeup();
+    else if(live.phase==='answer') doAnswer(live);
+  });
+  dbListen('scores',function(sc){if(sc)updateMiniWithSc(sc);});
+}
+
+// ===== PHASES =====
+function doQuestion(live){
+  phase='question';myQid=live.qid;submitted=false;
+  clearInterval(cdI);stopStTick();
+  document.getElementById('qnum').textContent='SAVOL №'+live.qid;
+  document.getElementById('qtext').textContent=live.qt;
+  setRing(60,60);
+  document.getElementById('ok-box').style.display='none';
+  document.getElementById('tu-box').style.display='none';
+  document.getElementById('inp-area').style.display='block';
+  document.getElementById('ans-ta').value='';
+  document.getElementById('ans-ta').disabled=false;
+  document.getElementById('sub-btn').disabled=false;
+  sndQuestion();showSc('q');
+}
+function doTimer(live){
+  phase='timer';clearInterval(cdI);stopStTick();
+  var dur=live.dur||60;
+  stLeft=Math.max(0,dur-Math.floor((Date.now()-live.ts)/1000));
+  if(stLeft<=0){doTimeup();return;}
+  if(!submitted){
+    document.getElementById('ok-box').style.display='none';
+    document.getElementById('tu-box').style.display='none';
+    document.getElementById('inp-area').style.display='block';
+    document.getElementById('ans-ta').disabled=false;
+    document.getElementById('sub-btn').disabled=false;
+  }
+  if(live.qt)document.getElementById('qtext').textContent=live.qt;
+  if(live.qid){document.getElementById('qnum').textContent='SAVOL №'+live.qid;myQid=live.qid;}
+  startStTick(stLeft);
+  setRing(stLeft,dur);
+  cdI=setInterval(function(){stLeft--;setRing(stLeft,dur);if(stLeft<=0){clearInterval(cdI);doTimeup();}},1000);
+  showSc('q');
+}
+function doTimeup(){
+  if(phase==='timeup'||phase==='answer'||phase==='final')return;
+  phase='timeup';clearInterval(cdI);stopStTick();sndTimeup();
+  setRing(0,60);
+  if(!submitted){
+    document.getElementById('inp-area').style.display='none';
+    document.getElementById('tu-box').style.display='block';
+    document.getElementById('ans-ta').disabled=true;
+    document.getElementById('sub-btn').disabled=true;
+  }
+  showSc('q');
+}
+function doAnswer(live){
+  phase='answer';clearInterval(cdI);stopStTick();
+  document.getElementById('ar-txt').textContent=live.ans||'—';
+  // Check if marked
+  dbListen('subs/'+myTeam+'_'+live.qid,function(sub){
+    var res='<div style="text-align:center;color:var(--mut);font-size:.8rem;margin-bottom:10px">⏳ Tekshirilmoqda...</div>';
+    if(sub){
+      if(sub.correct===true){res='<div class="res-ok">✅ To\'g\'ri! +1 ball qo\'shildi</div>';sndCorrect();}
+      else if(sub.correct===false){res='<div class="res-no">❌ Noto\'g\'ri deb belgilandi</div>';sndWrong();}
+    }
+    document.getElementById('ar-result').innerHTML=res;
+  });
+  showSc('ans');
+}
+function doFinal(live){
+  phase='final';clearInterval(cdI);stopStTick();
+  var sc=live.scores||{};
+  var sorted=live.sorted||Object.keys(sc).sort(function(a,b){return sc[b]-sc[a];});
+  var mx=sorted.length?(sc[sorted[0]]||1):1;
+  document.getElementById('fin-rows').innerHTML=sorted.map(function(t,i){
+    var isMe=t===myTeam;
+    var p=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'.';
+    return '<div class="fr" style="animation-delay:'+i*.08+'s'+(isMe?';border-color:rgba(0,210,255,.4)':'')+'">' +
+      '<div class="fr-p">'+p+'</div>'+
+      '<div class="fr-n'+(isMe?' me':'')+'">'+(isMe?'⭐ ':'')+esc(t)+'</div>'+
+      '<div class="fr-bw"><div class="fr-bf" style="width:'+((sc[t]/mx)*100).toFixed(1)+'%"></div></div>'+
+      '<div class="fr-s">'+sc[t]+'</div></div>';
+  }).join('')||'<div style="text-align:center;color:var(--mut);padding:20px">Natija yo\'q</div>';
+  showSc('fin');
+}
+
+// ===== SEND ANSWER =====
+function sendAns(){
+  if(submitted){toast('Javob allaqachon yuborilgan!','i');return;}
+  if(phase==='timeup'){toast('Vaqt tugadi!','e');return;}
+  var ta=document.getElementById('ans-ta');
+  var ans=ta.value.trim();
+  if(!ans){ta.style.borderColor='var(--red)';setTimeout(function(){ta.style.borderColor='';},900);toast('Javobni yozing!','e');return;}
+  submitted=true;
+  var key=myTeam+'_'+myQid;
+  var sub={team:myTeam,answer:ans,qid:myQid,time:nowTime(),correct:null};
+  dbSet('subs/'+key,sub);
+  document.getElementById('inp-area').style.display='none';
+  document.getElementById('ok-prev').textContent='"'+ans+'"';
+  document.getElementById('ok-box').style.display='block';
+  sndSubmit();toast('Javob yuborildi! ✅','s');
+}
+
+// ===== RING =====
+function setRing(t,dur){
+  document.getElementById('tc').style.strokeDashoffset=CIRC*(1-t/dur);
+  document.getElementById('tc').style.stroke=t>15?'#00ffcc':t>7?'#f59e0b':'#ff4757';
+  var tn=document.getElementById('tnum');tn.textContent=t;tn.classList.toggle('red',t<=7);
+}
+
+// ===== MINI SCORES =====
+function updateMini(){dbListen('scores',function(sc){if(sc)updateMiniWithSc(sc);});}
+function updateMiniWithSc(sc){
+  var teams=Object.keys(sc);if(!teams.length){document.getElementById('mini-sc').innerHTML='';return;}
+  var sorted=teams.slice().sort(function(a,b){return sc[b]-sc[a];});
+  document.getElementById('mini-sc').innerHTML=sorted.slice(0,6).map(function(t){
+    return '<span class="ms">'+esc(t)+': <b style="color:var(--gold)">'+sc[t]+'</b></span>';
+  }).join('');
+}
+
+function nowTime(){var d=new Date();return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function toast(msg,t){var w=document.getElementById('toasts'),el=document.createElement('div');el.className='toast '+(t||'i');el.textContent=msg;w.appendChild(el);setTimeout(function(){el.remove();},3200);}
+</script>
+</body>
+</html>
